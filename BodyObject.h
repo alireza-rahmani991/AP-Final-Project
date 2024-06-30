@@ -7,15 +7,14 @@
 
 class BodyObject
 {
-private:
+protected:
     int width;
     int height;
     Position position;
-    // QGraphicsPixmapItem image;
     QGraphicsPixmapItem* image = nullptr;
 
 public:
-    BodyObject(int Width, int Height, Position _position, QGraphicsPixmapItem* Image);
+    BodyObject(int Width, int Height, Position _positionz, QGraphicsPixmapItem* Image);
     virtual void draw(QGraphicsScene &scene) = 0;
 };
 
