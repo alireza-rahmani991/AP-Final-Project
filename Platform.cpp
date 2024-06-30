@@ -1,7 +1,7 @@
 #include "platform.h"
 #include <QGraphicsPixmapItem>
 #include <QGraphicsScene>
-#include <position.h>
+#include "position.h"
 
 
 
