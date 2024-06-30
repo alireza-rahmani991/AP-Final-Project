@@ -1,9 +1,0 @@
-# ninja log v6
-37	1524	7413525976402165	AP_Final_Project_autogen/timestamp	2de48038c70996a5
-37	1524	7413525976402165	AP_Final_Project_autogen/mocs_compilation.cpp	2de48038c70996a5
-37	1524	7413525976402165	C:/Users/User/Desktop/AP_Final_Project/AP_Final_Project/build/Desktop_Qt_6_7_2_MinGW_64_bit-Debug/AP_Final_Project_autogen/timestamp	2de48038c70996a5
-37	1524	7413525976402165	C:/Users/User/Desktop/AP_Final_Project/AP_Final_Project/build/Desktop_Qt_6_7_2_MinGW_64_bit-Debug/AP_Final_Project_autogen/mocs_compilation.cpp	2de48038c70996a5
-1552	5522	7413525979071485	CMakeFiles/AP_Final_Project.dir/AP_Final_Project_autogen/mocs_compilation.cpp.obj	88a76cb0f15fe5aa
-1556	5579	7413525979117852	CMakeFiles/AP_Final_Project.dir/main.cpp.obj	96b4be1d481a0506
-1560	5690	7413525979159429	CMakeFiles/AP_Final_Project.dir/mainwindow.cpp.obj	43eeb8a539b46767
-5690	6353	7413526020452590	AP_Final_Project.exe	274776afe62c56b
