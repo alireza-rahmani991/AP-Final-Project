@@ -9,6 +9,8 @@ private:
 public:
     Position();
     Position(int X, int Y);
+
+
     int getX() const;
     void setX(int x);
     int getY() const;

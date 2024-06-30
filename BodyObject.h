@@ -3,7 +3,7 @@
 
 #include <QGraphicsPixmapItem>
 #include <QGraphicsScene>
-#include <position.h>
+#include "position.h"
 
 class BodyObject
 {
