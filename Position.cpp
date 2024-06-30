@@ -1,7 +1,9 @@
 #include "position.h"
 
-Position::Position() {}
-Position::Position(int x, int y) : x(x), y(y) {}
+Position::Position(int X, int Y):x(X), y(Y) {}
+
+Position::Position():x(0), y(0) {}
+
 
 int Position::getX() const {
     return x;
@@ -18,5 +20,4 @@ int Position::getY() const {
 void Position::setY(int y) {
     Position::y = y;
 }
-
 

@@ -8,7 +8,8 @@ private:
     int y;
 public:
     Position();
-    Position(int x, int y);
+    Position(int X, int Y);
+
 
     int getX() const;
     void setX(int x);

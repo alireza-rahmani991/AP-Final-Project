@@ -1,5 +1,7 @@
 <RCC>
-    <qresource>
+    <qresource prefix="/new/prefix1">
+        <file>img/platform.png</file>
+        <file>img/platformSmallTall.png</file>
         <file alias="background">resources/images/background.png</file>
         <file alias="hill1">resources/images/hill1.png</file>
         <file alias="hill2">resources/images/hill2.png</file>
@@ -8,3 +10,4 @@
         <file alias="hill5">resources/images/hill5.png</file>
     </qresource>
 </RCC>
+
