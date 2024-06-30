@@ -8,6 +8,7 @@ private:
     int y;
 public:
     Position();
+    Position(int X, int Y);
 };
 
 #endif // POSITION_H
