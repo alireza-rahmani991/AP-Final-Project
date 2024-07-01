@@ -3,6 +3,7 @@
 
 #include "position.h"
 #include "bodyobject.h"
+#include <QKeyEvent>
 
 
 class Player : public BodyObject
@@ -12,12 +13,13 @@ private:
     Position velocity;
 public:
     Player(int Width, int Height, Position _position, QGraphicsPixmapItem* Image, int Speed, Position Velocity);
+    void draw(QGraphicsScene &scene) override;
     void handleGravity();
     void handleRightMovement();
     void handleLeftMovement();
     void handleUpMovement();
     void handleDownMovement();
-    void handleMovement();
+    void handleMovement(QKeyEvent* event);
 
 };
 
