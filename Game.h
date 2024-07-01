@@ -3,6 +3,10 @@
 
 #include <QGraphicsView>
 #include "Decorator.h"
+#include "Player.h"
+#include "platform.h"
+#include <QGraphicsItem>
+
 
 class Game : public QGraphicsView
 {

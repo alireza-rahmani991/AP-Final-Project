@@ -8,6 +8,7 @@
         <file>img/hill3.png</file>
         <file>img/hill4.png</file>
         <file>img/hill5.png</file>
+        <file>img/Player_standing.png</file>
     </qresource>
 </RCC>
 
