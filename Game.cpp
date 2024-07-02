@@ -4,19 +4,19 @@
 
 Game::Game()
 {
+    setFocusPolicy(Qt::StrongFocus);
 
+    setFocusPolicy(Qt::StrongFocus);
     int platformHeight = 110;
 
     setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
     setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
     showFullScreen();
 
-    auto scene = new QGraphicsScene(this);
-
+    // auto scene = new QGraphicsScene(this);
+    QGraphicsScene* scene = new QGraphicsScene(this);
     scene->setSceneRect(0, 0, width(), height());
-
     scene->setBackgroundBrush(QBrush(QColor("white")));
-
     setScene(scene);
 
 
@@ -70,13 +70,21 @@ Game::Game()
     plt3->draw(*scene);
 
 
-    int playerWidth = platformWidth / 5;
-    int playerHeight = platformHeight / 3;
-    Position playerPosition((screenWidth - playerWidth) / 2, screenHeight - 3 * platformHeight);
+    Position playerPosition(0, 510);
     auto playerImage = new QGraphicsPixmapItem(QPixmap(":/new/prefix1/img/Player_standing.png"));
-    Player *player = new Player(playerWidth, playerHeight, playerPosition, playerImage, 5, Position(0, 0));
-
+    player = new Player(100, 100, playerPosition, playerImage, 5, Position(0, 0), scene);
     player->draw(*scene);
 
 
+}
+
+
+void Game::keyPressEvent(QKeyEvent *event) {
+    player->handleMovement(event);
+    QGraphicsView::keyPressEvent(event);
+}
+
+void Game::keyReleaseEvent(QKeyEvent *event) {
+    player->handleKeyRelease(event);
+    QGraphicsView::keyReleaseEvent(event);  // Ensure other key events are handled
 }
