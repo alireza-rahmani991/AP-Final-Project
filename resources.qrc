@@ -14,66 +14,36 @@
         <file>img/hill4.png</file>
         <file>img/hill5.png</file>
         <file>img/Player_standing.png</file>
-        <file>../../Desktop/running images/running6.png</file>
-        <file>../../Desktop/running images/running7.png</file>
-        <file>../../Desktop/running images/running8.png</file>
-        <file>../../Desktop/running images/running9.png</file>
-        <file>../../Desktop/running images/running10.png</file>
-        <file>../../Desktop/running images/running11.png</file>
-        <file>../../Desktop/running images/running12.png</file>
-        <file>../../Desktop/running images/running13.png</file>
-        <file>../../Desktop/running images/running14.png</file>
-        <file>../../Desktop/running images/running15.png</file>
-        <file>../../Desktop/running images/running16.png</file>
-        <file>../../Desktop/running images/running17.png</file>
-        <file>../../Desktop/running images/running18.png</file>
-        <file>../../Desktop/running images/running19.png</file>
-        <file>../../Desktop/running images/running20.png</file>
-        <file>../../Desktop/running images/running21.png</file>
-        <file>../../Desktop/running images/running22.png</file>
-        <file>../../Desktop/running images/running23.png</file>
-        <file>../../Desktop/running images/running24.png</file>
-        <file>../../Desktop/running images/running25.png</file>
-        <file>../../Desktop/running images/running26.png</file>
-        <file>../../Desktop/running images/running28.png</file>
-        <file>../../Desktop/running images/running29.png</file>
-        <file>../../Desktop/running images/running30.png</file>
-        <file>../../Desktop/running images/running1.png</file>
-        <file>../../Desktop/running images/running2.png</file>
-        <file>../../Desktop/running images/running3.png</file>
-        <file>../../Desktop/running images/running4.png</file>
-        <file>../../Desktop/running images/running5.png</file>
-        <file>img/running1.png</file>
-        <file>img/running2.png</file>
-        <file>img/running3.png</file>
-        <file>img/running4.png</file>
-        <file>img/running5.png</file>
-        <file>img/running6.png</file>
-        <file>img/running7.png</file>
-        <file>img/running8.png</file>
-        <file>img/running9.png</file>
-        <file>img/running10.png</file>
-        <file>img/running11.png</file>
-        <file>img/running12.png</file>
-        <file>img/running13.png</file>
-        <file>img/running14.png</file>
-        <file>img/running15.png</file>
-        <file>img/running16.png</file>
-        <file>img/running17.png</file>
-        <file>img/running18.png</file>
-        <file>img/running19.png</file>
-        <file>img/running20.png</file>
-        <file>img/running21.png</file>
-        <file>img/running22.png</file>
-        <file>img/running23.png</file>
-        <file>img/running24.png</file>
-        <file>img/running25.png</file>
-        <file>img/running26.png</file>
-        <file>img/running28.png</file>
-        <file>img/running29.png</file>
-        <file>img/running30.png</file>
-    </qresource>
-    <qresource prefix="/">
-        <file>img/Player_standing.png</file>
+        <file>img/jump/jump_anim1.png</file>
+        <file>img/jump/jump_anim5.png</file>
+        <file>img/running/running1.png</file>
+        <file>img/running/running2.png</file>
+        <file>img/running/running3.png</file>
+        <file>img/running/running4.png</file>
+        <file>img/running/running5.png</file>
+        <file>img/running/running6.png</file>
+        <file>img/running/running7.png</file>
+        <file>img/running/running8.png</file>
+        <file>img/running/running9.png</file>
+        <file>img/running/running10.png</file>
+        <file>img/running/running11.png</file>
+        <file>img/running/running12.png</file>
+        <file>img/running/running13.png</file>
+        <file>img/running/running14.png</file>
+        <file>img/running/running15.png</file>
+        <file>img/running/running16.png</file>
+        <file>img/running/running17.png</file>
+        <file>img/running/running18.png</file>
+        <file>img/running/running19.png</file>
+        <file>img/running/running20.png</file>
+        <file>img/running/running21.png</file>
+        <file>img/running/running22.png</file>
+        <file>img/running/running23.png</file>
+        <file>img/running/running24.png</file>
+        <file>img/running/running25.png</file>
+        <file>img/running/running26.png</file>
+        <file>img/running/running28.png</file>
+        <file>img/running/running29.png</file>
+        <file>img/running/running30.png</file>
     </qresource>
 </RCC>

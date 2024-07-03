@@ -4,8 +4,9 @@
 #include <QGraphicsPixmapItem>
 #include <QGraphicsScene>
 #include "position.h"
+#include <QObject>
 
-class BodyObject
+class BodyObject : public QObject, public QGraphicsPixmapItem
 {
 protected:
     int width;

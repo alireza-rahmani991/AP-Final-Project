@@ -8,18 +8,18 @@
 #include <QGraphicsItem>
 
 
-class Game : public QGraphicsView {
-    Q_OBJECT
-
+class Game : public QGraphicsView
+{
 public:
     Game();
 
 protected:
-    void keyPressEvent(QKeyEvent *event);
-    void keyReleaseEvent(QKeyEvent *event);
+    void keyPressEvent(QKeyEvent *event) override;
+    void keyReleaseEvent(QKeyEvent *event) override;
+
 
 private:
-    Player *player; // Declare the player object as a member variable
+    Player *player;
 };
 
 #endif
