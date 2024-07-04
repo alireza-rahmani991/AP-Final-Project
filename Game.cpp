@@ -75,6 +75,7 @@ Game::Game()
     int groundY = screenHeight - 3 * platformHeight;
     Position playerPosition((screenWidth - playerWidth) / 2, groundY);
     auto playerImage = new QGraphicsPixmapItem(QPixmap(":/new/prefix1/img/Player_standing.png"));
+    auto standLeftImg = new QGraphicsPixmapItem(QPixmap(":/new/prefix1/img/standingLeft.png"));
     player = new Player(playerWidth, playerHeight, playerPosition, playerImage, 5, Position(0, 0), groundY);
 
     player->draw(*scene);
