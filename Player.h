@@ -8,7 +8,6 @@
 #include <QList>
 #include <QTimer>
 
-
 class Player : public BodyObject
 {
     Q_OBJECT
@@ -22,12 +21,17 @@ private:
     QPropertyAnimation *heightAnimator;
     int jumpFrame{};
     int runFrame{};
+    int runLeftFrame{};
     QPixmap standImg;
+    QPixmap standLeftImg;
     QList<QPixmap*> jumpFrames{};
     QList<QPixmap*> runFrames{};
+    QList<QPixmap*> leftRunFrames{}; // Add this line
     QTimer* jumpAnimTimer;
     QTimer* runAnimTimer;
+    QTimer* leftRunAnimTimer;
     bool runAnimStarted{};
+    bool isRunningLeft;
 
 public:
     Player(int Width, int Height, Position _position, QGraphicsPixmapItem* Image, int Speed, Position Velocity, int groundY);
@@ -43,10 +47,12 @@ public:
     void setY(qreal h) { position.setY(h); }
 
 public slots:
-            void jumpAnim();
+    void jumpAnim();
     void runAnim();
+    void leftRunAnim();
     void handleGravity();
     void setStandingImage();
+    void setStandingLeftImage();
 
 
 };
