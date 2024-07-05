@@ -5,13 +5,14 @@
 #include <QGraphicsPixmapItem>
 #include <QGraphicsScene>
 
-Player::Player(int Width, int Height, Position _position, QGraphicsPixmapItem* Image, int Speed, Position Velocity, int groundY) :
-        BodyObject(Width, Height, _position, Image)
+Player::Player(int Width, int Height, Position _position, QGraphicsPixmapItem* standRightImage, QGraphicsPixmapItem* standLeftImage, int Speed, Position Velocity, int groundY) :
+        BodyObject(Width, Height, _position, standRightImage)
 {
     this->groundY = groundY;
     speed = Speed;
     velocity = Velocity;
-    this->standImg = image->pixmap();
+    this->standRightImg = image->pixmap();
+    this->standLeftImg = standLeftImage->pixmap();
     setFlag(GraphicsItemFlag::ItemIsFocusable);
     setFocus();
 
@@ -19,15 +20,24 @@ Player::Player(int Width, int Height, Position _position, QGraphicsPixmapItem* I
     animHeight = 2 * height;
 
     //adding animation for jumping
-    auto pixmap = new QPixmap(":/new/prefix1/img/jump_anim1.png");
+    auto pixmap = new QPixmap(":/new/prefix1/img/running21.png");
     auto scaledPixmap = pixmap->scaled(animWidth, animHeight, Qt::KeepAspectRatioByExpanding);
+    jumpFrames.append(new QPixmap(scaledPixmap));
 
-    pixmap = new QPixmap(":/new/prefix1/img/jump_anim5.png");
+    pixmap = new QPixmap(":/new/prefix1/img/running22.png");
     scaledPixmap = pixmap->scaled(animWidth, animHeight, Qt::KeepAspectRatioByExpanding);
     jumpFrames.append(new QPixmap(scaledPixmap));
 
+    pixmap = new QPixmap(":/new/prefix1/img/runLeft21.png");
+    scaledPixmap = pixmap->scaled(animWidth, animHeight, Qt::KeepAspectRatioByExpanding);
+    jumpLeftFrames.append(new QPixmap(scaledPixmap));
+
+    pixmap = new QPixmap(":/new/prefix1/img/runLeft22.png");
+    scaledPixmap = pixmap->scaled(animWidth, animHeight, Qt::KeepAspectRatioByExpanding);
+    jumpLeftFrames.append(new QPixmap(scaledPixmap));
+
     jumpAnimTimer = new QTimer(this);
-    jumpAnimTimer->setInterval(0);
+    jumpAnimTimer->setInterval(0); // Set an appropriate interval for the jump animation
     connect(jumpAnimTimer, &QTimer::timeout, this, &Player::jumpAnim);
 
     //connecting to gravity
@@ -78,6 +88,7 @@ void Player::handleMovement(QKeyEvent* event) {
     if (event->key() == Qt::Key_Left) {
         if (event->type() == QEvent::KeyPress) {
             handleLeftMovement();
+            isRunningLeft = true;
             if (!leftRunAnimTimer->isActive()) {
                 runLeftFrame = 0;
                 leftRunAnimTimer->start();
@@ -89,6 +100,7 @@ void Player::handleMovement(QKeyEvent* event) {
     } else if (event->key() == Qt::Key_Right) {
         if (event->type() == QEvent::KeyPress) {
             handleRightMovement();
+            isRunningLeft = false;
             if (!runAnimTimer->isActive()) {
                 runFrame = 0;
                 runAnimTimer->start();
@@ -135,29 +147,33 @@ void Player::handleUpMovement() {
 }
 
 void Player::jumpAnim() {
-    if (!jumpFrames.isEmpty() && jumpFrame < jumpFrames.size()) {
-        image->setPixmap(*jumpFrames.at(jumpFrame));
+    QList<QPixmap*>* currentJumpFrames = isRunningLeft ? &jumpLeftFrames : &jumpFrames;
+
+    if (!currentJumpFrames->isEmpty() && jumpFrame < currentJumpFrames->size()) {
+        image->setPixmap(*currentJumpFrames->at(jumpFrame));
         jumpFrame++;
     }
 
     // Stop the timer when the last frame is reached
-    if (jumpFrame >= jumpFrames.size()) {
+    if (jumpFrame >= currentJumpFrames->size()) {
         jumpAnimTimer->stop();
         jumped = true;
     }
 }
 
 void Player::setStandingImage() {
-    image->setPixmap(standImg.scaled(width, height, Qt::KeepAspectRatioByExpanding));
-    image->setPos(position.getX(), position.getY());
-    jumped = false;
+    if(isRunningLeft){
+        image->setPixmap(standLeftImg.scaled(width, height, Qt::KeepAspectRatioByExpanding));
+        image->setPos(position.getX(), position.getY());
+        jumped = false;
+    }
+    else{
+        image->setPixmap(standRightImg.scaled(width, height, Qt::KeepAspectRatioByExpanding));
+        image->setPos(position.getX(), position.getY());
+        jumped = false;
+    }
 }
 
-void Player::setStandingLeftImage() {
-    image->setPixmap(standLeftImg.scaled(width, height, Qt::KeepAspectRatioByExpanding));
-    image->setPos(position.getX(), position.getY());
-    jumped = false;
-}
 
 void Player::handleRightMovement() {
     int newX = position.getX() + speed;
@@ -192,6 +208,7 @@ Player::~Player() {
     delete jumpAnimTimer;
     delete runAnimTimer;
     delete leftRunAnimTimer;
+    qDeleteAll(jumpLeftFrames);
     qDeleteAll(leftRunFrames);
     qDeleteAll(jumpFrames);
     qDeleteAll(runFrames);

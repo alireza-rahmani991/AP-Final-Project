@@ -22,9 +22,10 @@ private:
     int jumpFrame{};
     int runFrame{};
     int runLeftFrame{};
-    QPixmap standImg;
+    QPixmap standRightImg;
     QPixmap standLeftImg;
     QList<QPixmap*> jumpFrames{};
+    QList<QPixmap*> jumpLeftFrames{};
     QList<QPixmap*> runFrames{};
     QList<QPixmap*> leftRunFrames{};
     QTimer* jumpAnimTimer;
@@ -34,7 +35,7 @@ private:
     bool isRunningLeft;
 
 public:
-    Player(int Width, int Height, Position _position, QGraphicsPixmapItem* Image, int Speed, Position Velocity, int groundY);
+    Player(int Width, int Height, Position _position, QGraphicsPixmapItem* standRightImage,QGraphicsPixmapItem* standLeftImage, int Speed, Position Velocity, int groundY);
     void draw(QGraphicsScene &scene) override;
     ~Player();
     void handleRightMovement();
@@ -52,7 +53,6 @@ public slots:
     void leftRunAnim();
     void handleGravity();
     void setStandingImage();
-    void setStandingLeftImage();
 
 
 };
