@@ -4,46 +4,74 @@
         <file>img/platformSmallTall.png</file>
         <file>img/background.png</file>
         <file>img/hills.png</file>
-        <file>img/spriteRunLeft.png</file>
-        <file>img/spriteRunRight.png</file>
-        <file>img/spriteStandLeft.png</file>
-        <file>img/spriteStandRight.png</file>
         <file>img/hill1.png</file>
         <file>img/hill2.png</file>
         <file>img/hill3.png</file>
         <file>img/hill4.png</file>
         <file>img/hill5.png</file>
         <file>img/Player_standing.png</file>
-        <file>img/jump/jump_anim1.png</file>
-        <file>img/jump/jump_anim5.png</file>
-        <file>img/running/running1.png</file>
-        <file>img/running/running2.png</file>
-        <file>img/running/running3.png</file>
-        <file>img/running/running4.png</file>
-        <file>img/running/running5.png</file>
-        <file>img/running/running6.png</file>
-        <file>img/running/running7.png</file>
-        <file>img/running/running8.png</file>
-        <file>img/running/running9.png</file>
-        <file>img/running/running10.png</file>
-        <file>img/running/running11.png</file>
-        <file>img/running/running12.png</file>
-        <file>img/running/running13.png</file>
-        <file>img/running/running14.png</file>
-        <file>img/running/running15.png</file>
-        <file>img/running/running16.png</file>
-        <file>img/running/running17.png</file>
-        <file>img/running/running18.png</file>
-        <file>img/running/running19.png</file>
-        <file>img/running/running20.png</file>
-        <file>img/running/running21.png</file>
-        <file>img/running/running22.png</file>
-        <file>img/running/running23.png</file>
-        <file>img/running/running24.png</file>
-        <file>img/running/running25.png</file>
-        <file>img/running/running26.png</file>
-        <file>img/running/running28.png</file>
-        <file>img/running/running29.png</file>
-        <file>img/running/running30.png</file>
+        <file>img/standingLeft.png</file>
+        <file>img/jump_anim1.png</file>
+        <file>img/jump_anim5.png</file>
+        <file>img/running1.png</file>
+        <file>img/running2.png</file>
+        <file>img/running3.png</file>
+        <file>img/running4.png</file>
+        <file>img/running5.png</file>
+        <file>img/running6.png</file>
+        <file>img/running7.png</file>
+        <file>img/running8.png</file>
+        <file>img/running9.png</file>
+        <file>img/running10.png</file>
+        <file>img/running11.png</file>
+        <file>img/running12.png</file>
+        <file>img/running13.png</file>
+        <file>img/running14.png</file>
+        <file>img/running15.png</file>
+        <file>img/running16.png</file>
+        <file>img/running17.png</file>
+        <file>img/running18.png</file>
+        <file>img/running19.png</file>
+        <file>img/running20.png</file>
+        <file>img/running21.png</file>
+        <file>img/running22.png</file>
+        <file>img/running23.png</file>
+        <file>img/running24.png</file>
+        <file>img/running25.png</file>
+        <file>img/running26.png</file>
+        <file>img/running27.png</file>
+        <file>img/running28.png</file>
+        <file>img/running29.png</file>
+        <file>img/running30.png</file>
+        <file>img/runLeft1.png</file>
+        <file>img/runLeft2.png</file>
+        <file>img/runLeft3.png</file>
+        <file>img/runLeft4.png</file>
+        <file>img/runLeft5.png</file>
+        <file>img/runLeft6.png</file>
+        <file>img/runLeft7.png</file>
+        <file>img/runLeft8.png</file>
+        <file>img/runLeft9.png</file>
+        <file>img/runLeft10.png</file>
+        <file>img/runLeft11.png</file>
+        <file>img/runLeft12.png</file>
+        <file>img/runLeft13.png</file>
+        <file>img/runLeft14.png</file>
+        <file>img/runLeft15.png</file>
+        <file>img/runLeft16.png</file>
+        <file>img/runLeft17.png</file>
+        <file>img/runLeft18.png</file>
+        <file>img/runLeft19.png</file>
+        <file>img/runLeft20.png</file>
+        <file>img/runLeft21.png</file>
+        <file>img/runLeft22.png</file>
+        <file>img/runLeft23.png</file>
+        <file>img/runLeft24.png</file>
+        <file>img/runLeft25.png</file>
+        <file>img/runLeft26.png</file>
+        <file>img/runLeft27.png</file>
+        <file>img/runLeft28.png</file>
+        <file>img/runLeft29.png</file>
+        <file>img/runLeft30.png</file>
     </qresource>
 </RCC>

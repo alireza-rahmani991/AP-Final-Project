@@ -26,11 +26,11 @@ private:
     QPixmap standLeftImg;
     QList<QPixmap*> jumpFrames{};
     QList<QPixmap*> runFrames{};
-    QList<QPixmap*> leftRunFrames{}; // Add this line
+    QList<QPixmap*> leftRunFrames{};
     QTimer* jumpAnimTimer;
     QTimer* runAnimTimer;
     QTimer* leftRunAnimTimer;
-    bool runAnimStarted{};
+    bool jumped{};
     bool isRunningLeft;
 
 public:
