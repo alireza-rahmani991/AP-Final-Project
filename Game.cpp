@@ -11,7 +11,7 @@ Game::Game()
     setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
     showFullScreen();
 
-    auto scene = new QGraphicsScene(this);
+    scene = new QGraphicsScene(this);
 
     scene->setSceneRect(0, 0, width(), height());
 
@@ -73,10 +73,10 @@ Game::Game()
     int playerWidth = platformWidth / 5;
     int playerHeight = platformHeight / 3;
     int groundY = screenHeight - 3 * platformHeight;
-    Position playerPosition((screenWidth - playerWidth) / 2, groundY);
+    Position playerPosition(10, groundY);
     auto playerImage = new QGraphicsPixmapItem(QPixmap(":/new/prefix1/img/Player_standing.png"));
     auto standLeftImg = new QGraphicsPixmapItem(QPixmap(":/new/prefix1/img/standingLeft.png"));
-    player = new Player(playerWidth, playerHeight, playerPosition, playerImage,standLeftImg,  5, Position(0, 0), groundY);
+    player = new Player(playerWidth, playerHeight, playerPosition, playerImage,standLeftImg,  5, Position(0, 0), groundY, scene);
 
     player->draw(*scene);
 
@@ -86,6 +86,7 @@ Game::Game()
 
 void Game::keyPressEvent(QKeyEvent *event) {
     player->handleMovement(event);
+
 }
 
 void Game::keyReleaseEvent(QKeyEvent *event) {

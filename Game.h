@@ -20,6 +20,7 @@ protected:
 
 private:
     Player *player;
+    QGraphicsScene* scene;
 };
 
 #endif

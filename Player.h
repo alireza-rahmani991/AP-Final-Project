@@ -5,6 +5,7 @@
 #include "bodyobject.h"
 #include <QKeyEvent>
 #include <QPropertyAnimation>
+#include <QGraphicsView>
 #include <QList>
 #include <QTimer>
 
@@ -33,9 +34,11 @@ private:
     QTimer* leftRunAnimTimer;
     bool jumped{};
     bool isRunningLeft;
+    QGraphicsScene* scene;
+    int sceneX{};
 
 public:
-    Player(int Width, int Height, Position _position, QGraphicsPixmapItem* standRightImage,QGraphicsPixmapItem* standLeftImage, int Speed, Position Velocity, int groundY);
+    Player(int Width, int Height, Position _position, QGraphicsPixmapItem* standRightImage,QGraphicsPixmapItem* standLeftImage, int Speed, Position Velocity, int groundY, QGraphicsScene* scene);
     void draw(QGraphicsScene &scene) override;
     ~Player();
     void handleRightMovement();

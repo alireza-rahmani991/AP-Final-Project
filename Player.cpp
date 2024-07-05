@@ -5,8 +5,8 @@
 #include <QGraphicsPixmapItem>
 #include <QGraphicsScene>
 
-Player::Player(int Width, int Height, Position _position, QGraphicsPixmapItem* standRightImage, QGraphicsPixmapItem* standLeftImage, int Speed, Position Velocity, int groundY) :
-        BodyObject(Width, Height, _position, standRightImage)
+Player::Player(int Width, int Height, Position _position, QGraphicsPixmapItem* standRightImage, QGraphicsPixmapItem* standLeftImage, int Speed, Position Velocity, int groundY,QGraphicsScene* scene) :
+        BodyObject(Width, Height, _position, standRightImage), scene(scene)
 {
     this->groundY = groundY;
     speed = Speed;
@@ -86,16 +86,22 @@ void Player::draw(QGraphicsScene &scene) {
 
 void Player::handleMovement(QKeyEvent* event) {
     if (event->key() == Qt::Key_Left) {
-        if (event->type() == QEvent::KeyPress) {
-            handleLeftMovement();
-            isRunningLeft = true;
-            if (!leftRunAnimTimer->isActive()) {
-                runLeftFrame = 0;
-                leftRunAnimTimer->start();
-            }
-        } else if (event->type() == QEvent::KeyRelease) {
+        if(position.getX() <= 0){
             leftRunAnimTimer->stop();
             setStandingImage();
+        }
+        else{
+            if (event->type() == QEvent::KeyPress) {
+                handleLeftMovement();
+                isRunningLeft = true;
+                if (!leftRunAnimTimer->isActive()) {
+                    runLeftFrame = 0;
+                    leftRunAnimTimer->start();
+                }
+            } else if (event->type() == QEvent::KeyRelease) {
+                leftRunAnimTimer->stop();
+                setStandingImage();
+            }
         }
     } else if (event->key() == Qt::Key_Right) {
         if (event->type() == QEvent::KeyPress) {
@@ -176,15 +182,38 @@ void Player::setStandingImage() {
 
 
 void Player::handleRightMovement() {
-    int newX = position.getX() + speed;
-    position.setX(newX);
-    image->setPos(newX, position.getY());
+    if(position.getX() >= (scene->width() - width)/2){
+        sceneX += 10;
+        for(auto item : scene->items()){
+            if(item != this->image){
+                item->moveBy(-10, 0);
+
+            }
+        }
+    }
+    else{
+        int newX = position.getX() + speed;
+        position.setX(newX);
+        image->setPos(newX, position.getY());
+    }
+
 }
 
 void Player::handleLeftMovement() {
-    int newX = position.getX() - speed;
-    position.setX(newX);
-    image->setPos(newX, position.getY());
+
+    if(position.getX() <= 50 && sceneX >= 10 ){
+        sceneX -= 10;
+        for(auto item : scene->items()){
+            if(item != this->image){
+                item->moveBy(10, 0);
+            }
+        }
+    }
+    else{
+        int newX = position.getX() - speed;
+        position.setX(newX);
+        image->setPos(newX, position.getY());
+    }
 }
 
 void Player::runAnim() {
