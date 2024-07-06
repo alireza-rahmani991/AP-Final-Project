@@ -1,19 +1,17 @@
 #include "Game.h"
 
-
-
 Game::Game() : gameOverTimer(new QTimer(this)) {
     connect(gameOverTimer, &QTimer::timeout, this, &Game::checkPlayerYPos);
+    connect(gameOverTimer, &QTimer::timeout, this, &Game::checkCollisions);
     startGame();
 }
 
 void Game::keyPressEvent(QKeyEvent *event) {
     player->handleMovement(event);
-
 }
 
 void Game::keyReleaseEvent(QKeyEvent *event) {
-    if(event->isAutoRepeat()) return;
+    if (event->isAutoRepeat()) return;
     player->handleMovement(event);
 }
 
@@ -24,13 +22,21 @@ void Game::checkPlayerYPos() {
 }
 
 void Game::handleGameOver() {
+    gameOverTimer->stop(); // Stop the timer before restarting the game
     scene->clear();
+
     delete player;
     player = nullptr;
+
     for (auto plt : platforms) {
         delete plt;
     }
     platforms.clear();
+
+    for (auto enemy : enemies) {
+        delete enemy;
+    }
+    enemies.clear();
 
     startGame();
 }
@@ -43,13 +49,9 @@ void Game::startGame() {
     showFullScreen();
 
     scene = new QGraphicsScene(this);
-
     scene->setSceneRect(0, 0, width(), height());
-
     scene->setBackgroundBrush(QBrush(QColor("white")));
-
     setScene(scene);
-
 
     int screenHeight = height();
     int screenWidth = width();
@@ -57,66 +59,100 @@ void Game::startGame() {
     int hillHeight = screenHeight / 3;
     int hillWidth = screenWidth / 3;
 
-    Position backgroundPosition(0,0);
-    auto backgroundImage = new QGraphicsPixmapItem( QPixmap(":/img/background.png"));
+    Position backgroundPosition(0, 0);
+    auto backgroundImage = new QGraphicsPixmapItem(QPixmap(":/img/background.png"));
     Decorator *background = new Decorator(width(), height(), backgroundPosition, backgroundImage);
     background->draw(*scene);
 
     auto hillImage1 = new QGraphicsPixmapItem(QPixmap(":/img/hill1.png"));
-    Position hillPos1(100, screenHeight - (platformHeight + 1.5 * hillHeight + 20)); // Position above platform
+    Position hillPos1(100, screenHeight - (platformHeight + 1.5 * hillHeight + 20));
     Decorator *hill1 = new Decorator(hillWidth, hillHeight, hillPos1, hillImage1);
     hill1->draw(*scene);
 
     auto hillImage3 = new QGraphicsPixmapItem(QPixmap(":/img/hill3.png"));
-    Position hillPos3(900, screenHeight - (platformHeight + 1.5 * hillHeight + 20)); // Position above platform
+    Position hillPos3(900, screenHeight - (platformHeight + 1.5 * hillHeight + 20));
     Decorator *hill3 = new Decorator(hillWidth, hillHeight, hillPos3, hillImage3);
     hill3->draw(*scene);
 
     auto hillImage5 = new QGraphicsPixmapItem(QPixmap(":/img/hill5.png"));
-    Position hillPos5(600, screenHeight - (platformHeight + 1.5 * hillHeight + 20)); // Position above platform
+    Position hillPos5(600, screenHeight - (platformHeight + 1.5 * hillHeight + 20));
     Decorator *hill5 = new Decorator(hillWidth / 2, hillHeight / 2, hillPos5, hillImage5);
     hill5->draw(*scene);
 
-
-
     int platformWidth = screenWidth / 3;
 
-    // Building the ground
-
-
     auto img1 = new QGraphicsPixmapItem(QPixmap(":/img/platform.png"));
-    Position pos1(0, screenHeight - platformHeight);  // Position the first platform at the bottom of the screen
-    Platform *plt1 = new Platform(platformWidth+2, platformHeight, pos1, img1);
+    Position pos1(0, screenHeight - platformHeight);
+    Platform *plt1 = new Platform(platformWidth + 2, platformHeight, pos1, img1);
     platforms.push_back(plt1);
+
     auto img2 = new QGraphicsPixmapItem(QPixmap(":/img/platform.png"));
-    Position pos2(platformWidth, screenHeight - platformHeight);  // Position the second platform next to the first
-    Platform *plt2 = new Platform(platformWidth+2, platformHeight, pos2, img2);
+    Position pos2(platformWidth, screenHeight - platformHeight);
+    Platform *plt2 = new Platform(platformWidth + 2, platformHeight, pos2, img2);
     platforms.push_back(plt2);
+
     auto img3 = new QGraphicsPixmapItem(QPixmap(":/img/platform.png"));
-    Position pos3((platformWidth * 2 ), screenHeight - platformHeight);  // Position the third platform next to the second
-    Platform *plt3 = new Platform(platformWidth+2, platformHeight, pos3, img3);
+    Position pos3(platformWidth * 2, screenHeight - platformHeight);
+    Platform *plt3 = new Platform(platformWidth + 2, platformHeight, pos3, img3);
     platforms.push_back(plt3);
+
     auto img4 = new QGraphicsPixmapItem(QPixmap(":/img/platform.png"));
-    Position pos4((platformWidth * 3.5 ), screenHeight - platformHeight);  // Position the third platform next to the second
-    Platform *plt4 = new Platform(platformWidth+2, platformHeight, pos4, img4);
+    Position pos4(platformWidth * 3.5, screenHeight - platformHeight);
+    Platform *plt4 = new Platform(platformWidth + 2, platformHeight, pos4, img4);
     platforms.push_back(plt4);
 
-    plt1->draw(*scene);
-    plt2->draw(*scene);
-    plt3->draw(*scene);
-    plt4->draw(*scene);
+    for (auto platform : platforms) {
+        platform->draw(*scene);
+    }
 
     int playerWidth = platformWidth / 5;
     int playerHeight = platformHeight / 3;
     int groundY = screenHeight - 3 * platformHeight;
     Position playerPosition(10, groundY);
+
     auto playerImage = new QGraphicsPixmapItem(QPixmap(":/img/Player_standing.png"));
     auto standLeftImg = new QGraphicsPixmapItem(QPixmap(":/img/standingLeft.png"));
-    player = new Player(playerWidth, playerHeight, playerPosition, playerImage,standLeftImg,  10, Position(0, 0), groundY, scene, platforms);
 
-
+    player = new Player(playerWidth, playerHeight, playerPosition, playerImage, standLeftImg, 10, Position(0, 0), groundY, scene, platforms);
     player->draw(*scene);
 
-    gameOverTimer->start(50);
+    int enemyWidth = 100;
+    int enemyHeight = 100;
+    auto enemyImage2 = new QGraphicsPixmapItem(QPixmap(":/img/enemyLeft"));
+    Position enemyPos2(700, groundY + 140);
+    enemies.push_back(new Enemy(enemyWidth, enemyHeight, enemyPos2, enemyImage2, 5, 700, 900));
 
+    for (auto enemy : enemies) {
+        enemy->draw(*scene);
+    }
+
+    gameOverTimer->start(50); // Restart the timer
+}
+
+void Game::checkCollisions() {
+    for (auto it = enemies.begin(); it != enemies.end();) {
+        Enemy* enemy = *it;
+
+        if (player->getPosition().getX() + player->getWidth() >= enemy->getPosition().getX()
+            && player->getPosition().getX() <= enemy->getPosition().getX() + enemy->getWidth()) {
+
+
+            if (player->getPosition().getY() <= 530 && player->getPosition().getY() >= 450) {
+
+                scene->removeItem(enemy->getGraphicsItem());
+                delete enemy;
+                it = enemies.erase(it);
+                continue;
+            } else if (player->getPosition().getY() == 534) {
+                for (auto enemy : enemies) {
+                    scene->removeItem(enemy->getGraphicsItem());
+                    delete enemy;
+                }
+                enemies.clear();
+                startGame();
+                return;
+            }
+        }
+        ++it;
+    }
 }
