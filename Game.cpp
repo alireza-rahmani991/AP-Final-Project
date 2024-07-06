@@ -83,6 +83,7 @@ Game::Game()
     auto standLeftImg = new QGraphicsPixmapItem(QPixmap(":/new/prefix1/img/standingLeft.png"));
     player = new Player(playerWidth, playerHeight, playerPosition, playerImage,standLeftImg,  10, Position(0, 0), groundY, scene, platforms);
 
+
     player->draw(*scene);
 
 

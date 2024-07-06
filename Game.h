@@ -13,7 +13,7 @@ class Game : public QGraphicsView
 {
 public:
     Game();
-
+    
 protected:
     void keyPressEvent(QKeyEvent *event) override;
     void keyReleaseEvent(QKeyEvent *event) override;
