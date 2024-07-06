@@ -22,22 +22,22 @@ Player::Player(int Width, int Height, Position _position, QGraphicsPixmapItem* s
 
 
     //adding animation for jumping while running right
-    auto pixmap = new QPixmap(":/new/prefix1/img/running21.png");
+    auto pixmap = new QPixmap(":/img/running21.png");
     auto scaledPixmap = pixmap->scaled(animWidth, animHeight, Qt::KeepAspectRatioByExpanding);
     jumpFrames.append(new QPixmap(scaledPixmap));
 
-    pixmap = new QPixmap(":/new/prefix1/img/running22.png");
+    pixmap = new QPixmap(":/img/running22.png");
     scaledPixmap = pixmap->scaled(animWidth, animHeight, Qt::KeepAspectRatioByExpanding);
     jumpFrames.append(new QPixmap(scaledPixmap));
 
 
 
     //adding animation for jumping while running left
-    pixmap = new QPixmap(":/new/prefix1/img/runLeft21.png");
+    pixmap = new QPixmap(":/img/runLeft21.png");
     scaledPixmap = pixmap->scaled(animWidth, animHeight, Qt::KeepAspectRatioByExpanding);
     jumpLeftFrames.append(new QPixmap(scaledPixmap));
 
-    pixmap = new QPixmap(":/new/prefix1/img/runLeft22.png");
+    pixmap = new QPixmap(":/img/runLeft22.png");
     scaledPixmap = pixmap->scaled(animWidth, animHeight, Qt::KeepAspectRatioByExpanding);
     jumpLeftFrames.append(new QPixmap(scaledPixmap));
 
@@ -55,7 +55,7 @@ Player::Player(int Width, int Height, Position _position, QGraphicsPixmapItem* s
 
     //adding animation for running right
     for (int i = 1; i <= 30; i++) {
-        auto pixmapPath = QString(":/new/prefix1/img/running%1.png").arg(i);
+        auto pixmapPath = QString(":/img/running%1.png").arg(i);
         auto pixmap2 = new QPixmap(pixmapPath);
         if (pixmap2->isNull()) {
             std::cerr << "Failed to load " << pixmapPath.toStdString() << std::endl;
@@ -73,7 +73,7 @@ Player::Player(int Width, int Height, Position _position, QGraphicsPixmapItem* s
 
     //adding animation for running left
     for (int i = 1; i <= 30; i++) {
-        auto pixmapPath = QString(":/new/prefix1/img/runLeft%1.png").arg(i);
+        auto pixmapPath = QString(":/img/runLeft%1.png").arg(i);
         auto pixmap3 = new QPixmap(pixmapPath);
         if (pixmap3->isNull()) {
             std::cerr << "Failed to load " << pixmapPath.toStdString() << std::endl;
@@ -269,7 +269,7 @@ void Player::checkOnPlatform() {
     if(!onPlat && !falling){
         heightAnimator->stop();
         heightAnimator->setStartValue(position.getY());
-        heightAnimator->setEndValue(5000);
+        heightAnimator->setEndValue(3000);
         heightAnimator->setDuration(2000);
         heightAnimator->setEasingCurve(QEasingCurve::InQuad);
         heightAnimator->start();
