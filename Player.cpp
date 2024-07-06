@@ -5,8 +5,9 @@
 #include <QGraphicsPixmapItem>
 #include <QGraphicsScene>
 
+
 Player::Player(int Width, int Height, Position _position, QGraphicsPixmapItem* standRightImage, QGraphicsPixmapItem* standLeftImage, int Speed, Position Velocity, int groundY,QGraphicsScene* scene,const std::vector<Platform*>& platforms) :
-        BodyObject(Width, Height, _position, standRightImage), scene(scene), platforms(platforms)
+    BodyObject(Width, Height, _position, standRightImage), scene(scene), platforms(platforms)
 {
     this->groundY = groundY;
     speed = Speed;
@@ -22,22 +23,22 @@ Player::Player(int Width, int Height, Position _position, QGraphicsPixmapItem* s
 
 
     //adding animation for jumping while running right
-    auto pixmap = new QPixmap(":/new/prefix1/img/running21.png");
+    auto pixmap = new QPixmap(":/img/running21.png");
     auto scaledPixmap = pixmap->scaled(animWidth, animHeight, Qt::KeepAspectRatioByExpanding);
     jumpFrames.append(new QPixmap(scaledPixmap));
 
-    pixmap = new QPixmap(":/new/prefix1/img/running22.png");
+    pixmap = new QPixmap(":/img/running22.png");
     scaledPixmap = pixmap->scaled(animWidth, animHeight, Qt::KeepAspectRatioByExpanding);
     jumpFrames.append(new QPixmap(scaledPixmap));
 
 
 
     //adding animation for jumping while running left
-    pixmap = new QPixmap(":/new/prefix1/img/runLeft21.png");
+    pixmap = new QPixmap(":/img/runLeft21.png");
     scaledPixmap = pixmap->scaled(animWidth, animHeight, Qt::KeepAspectRatioByExpanding);
     jumpLeftFrames.append(new QPixmap(scaledPixmap));
 
-    pixmap = new QPixmap(":/new/prefix1/img/runLeft22.png");
+    pixmap = new QPixmap(":/img/runLeft22.png");
     scaledPixmap = pixmap->scaled(animWidth, animHeight, Qt::KeepAspectRatioByExpanding);
     jumpLeftFrames.append(new QPixmap(scaledPixmap));
 
@@ -55,7 +56,7 @@ Player::Player(int Width, int Height, Position _position, QGraphicsPixmapItem* s
 
     //adding animation for running right
     for (int i = 1; i <= 30; i++) {
-        auto pixmapPath = QString(":/new/prefix1/img/running%1.png").arg(i);
+        auto pixmapPath = QString(":/img/running%1.png").arg(i);
         auto pixmap2 = new QPixmap(pixmapPath);
         if (pixmap2->isNull()) {
             std::cerr << "Failed to load " << pixmapPath.toStdString() << std::endl;
@@ -73,7 +74,7 @@ Player::Player(int Width, int Height, Position _position, QGraphicsPixmapItem* s
 
     //adding animation for running left
     for (int i = 1; i <= 30; i++) {
-        auto pixmapPath = QString(":/new/prefix1/img/runLeft%1.png").arg(i);
+        auto pixmapPath = QString(":/img/runLeft%1.png").arg(i);
         auto pixmap3 = new QPixmap(pixmapPath);
         if (pixmap3->isNull()) {
             std::cerr << "Failed to load " << pixmapPath.toStdString() << std::endl;
@@ -251,18 +252,24 @@ void Player::leftRunAnim() {
     runLeftFrame++;
 }
 
-
 void Player::checkOnPlatform() {
     bool onPlat = false;
     for(auto platform:platforms) {
         if (position.getX() + sceneX >= platform->getPosition().getX() &&
-                position.getX() + sceneX + width/2 <= platform->getPosition().getX() + platform->getWidth()){
-                onPlat = true;
-                break;
+            position.getX() + sceneX + width/2 <= platform->getPosition().getX() + platform->getWidth()){
+            onPlat = true;
+            break;
         }
     }
     if(onPlat){
-        std::cout<<"yes ";
+        image->setPixmap(QPixmap(":/img/jump_anim1.png")); // Change the image to a falling image
+        QTimer::singleShot(50, this, [&]() { // Create a 50ms delay
+            for (int i = 0; i < 10; i++) {
+                position.setY(position.getY() + 5);
+                image->setPos(position.getX(), position.getY());
+                scene->update();
+            }
+        });
     }
 }
 
@@ -279,4 +286,3 @@ Player::~Player() {
     qDeleteAll(jumpFrames);
     qDeleteAll(runFrames);
 }
-
