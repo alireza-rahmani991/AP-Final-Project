@@ -17,6 +17,11 @@ protected:
 public:
     BodyObject(int Width, int Height, Position _positionz, QGraphicsPixmapItem* Image);
     virtual void draw(QGraphicsScene &scene) = 0;
+    int getWidth() const;
+    int getHeight() const;
+    const Position &getPosition() const;
+    QGraphicsPixmapItem *getImage() const;
+    void setPosition(const Position &position);
 };
 
 #endif // BODYOBJECT_H

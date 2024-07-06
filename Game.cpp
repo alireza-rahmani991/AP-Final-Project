@@ -56,19 +56,19 @@ Game::Game()
     auto img1 = new QGraphicsPixmapItem(QPixmap(":/new/prefix1/img/platform.png"));
     Position pos1(0, screenHeight - platformHeight);  // Position the first platform at the bottom of the screen
     Platform *plt1 = new Platform(platformWidth+2, platformHeight, pos1, img1);
-
+    platforms.push_back(plt1);
     auto img2 = new QGraphicsPixmapItem(QPixmap(":/new/prefix1/img/platform.png"));
     Position pos2(platformWidth, screenHeight - platformHeight);  // Position the second platform next to the first
     Platform *plt2 = new Platform(platformWidth+2, platformHeight, pos2, img2);
-
+    platforms.push_back(plt2);
     auto img3 = new QGraphicsPixmapItem(QPixmap(":/new/prefix1/img/platform.png"));
     Position pos3((platformWidth * 2 ), screenHeight - platformHeight);  // Position the third platform next to the second
     Platform *plt3 = new Platform(platformWidth+2, platformHeight, pos3, img3);
-
+    platforms.push_back(plt3);
+    
     plt1->draw(*scene);
     plt2->draw(*scene);
     plt3->draw(*scene);
-
 
     int playerWidth = platformWidth / 5;
     int playerHeight = platformHeight / 3;
@@ -76,7 +76,7 @@ Game::Game()
     Position playerPosition(10, groundY);
     auto playerImage = new QGraphicsPixmapItem(QPixmap(":/new/prefix1/img/Player_standing.png"));
     auto standLeftImg = new QGraphicsPixmapItem(QPixmap(":/new/prefix1/img/standingLeft.png"));
-    player = new Player(playerWidth, playerHeight, playerPosition, playerImage,standLeftImg,  5, Position(0, 0), groundY, scene);
+    player = new Player(playerWidth, playerHeight, playerPosition, playerImage,standLeftImg,  5, Position(0, 0), groundY, scene, platforms);
 
     player->draw(*scene);
 

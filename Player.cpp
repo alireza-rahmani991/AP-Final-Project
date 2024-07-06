@@ -1,12 +1,12 @@
 #include "player.h"
-#include "platform.h"
+#include "Platform.h"
 #include "position.h"
 #include <iostream>
 #include <QGraphicsPixmapItem>
 #include <QGraphicsScene>
 
-Player::Player(int Width, int Height, Position _position, QGraphicsPixmapItem* standRightImage, QGraphicsPixmapItem* standLeftImage, int Speed, Position Velocity, int groundY,QGraphicsScene* scene) :
-        BodyObject(Width, Height, _position, standRightImage), scene(scene)
+Player::Player(int Width, int Height, Position _position, QGraphicsPixmapItem* standRightImage, QGraphicsPixmapItem* standLeftImage, int Speed, Position Velocity, int groundY,QGraphicsScene* scene,const std::vector<Platform*>& platforms) :
+        BodyObject(Width, Height, _position, standRightImage), scene(scene), platforms(platforms)
 {
     this->groundY = groundY;
     speed = Speed;
@@ -19,7 +19,9 @@ Player::Player(int Width, int Height, Position _position, QGraphicsPixmapItem* s
     animWidth = 2 * width;
     animHeight = 2 * height;
 
-    //adding animation for jumping
+
+
+    //adding animation for jumping while running right
     auto pixmap = new QPixmap(":/new/prefix1/img/running21.png");
     auto scaledPixmap = pixmap->scaled(animWidth, animHeight, Qt::KeepAspectRatioByExpanding);
     jumpFrames.append(new QPixmap(scaledPixmap));
@@ -28,6 +30,9 @@ Player::Player(int Width, int Height, Position _position, QGraphicsPixmapItem* s
     scaledPixmap = pixmap->scaled(animWidth, animHeight, Qt::KeepAspectRatioByExpanding);
     jumpFrames.append(new QPixmap(scaledPixmap));
 
+
+
+    //adding animation for jumping while running left
     pixmap = new QPixmap(":/new/prefix1/img/runLeft21.png");
     scaledPixmap = pixmap->scaled(animWidth, animHeight, Qt::KeepAspectRatioByExpanding);
     jumpLeftFrames.append(new QPixmap(scaledPixmap));
@@ -40,9 +45,13 @@ Player::Player(int Width, int Height, Position _position, QGraphicsPixmapItem* s
     jumpAnimTimer->setInterval(0); // Set an appropriate interval for the jump animation
     connect(jumpAnimTimer, &QTimer::timeout, this, &Player::jumpAnim);
 
+
+
     //connecting to gravity
     heightAnimator = new QPropertyAnimation(this, "height", this);
     connect(heightAnimator, &QPropertyAnimation::finished, this, &Player::handleGravity);
+
+
 
     //adding animation for running right
     for (int i = 1; i <= 30; i++) {
@@ -55,9 +64,12 @@ Player::Player(int Width, int Height, Position _position, QGraphicsPixmapItem* s
             runFrames.append(new QPixmap(scaledPixmap2));
         }
     }
+    //connecting the animation
     runAnimTimer = new QTimer(this);
-    runAnimTimer->setInterval(40);
+    runAnimTimer->setInterval(150 / speed);
     connect(runAnimTimer, &QTimer::timeout, this, &Player::runAnim);
+
+
 
     //adding animation for running left
     for (int i = 1; i <= 30; i++) {
@@ -70,11 +82,20 @@ Player::Player(int Width, int Height, Position _position, QGraphicsPixmapItem* s
             leftRunFrames.append(new QPixmap(scaledPixmap3));
         }
     }
+    //connecting the animation
     leftRunAnimTimer = new QTimer(this);
-    leftRunAnimTimer->setInterval(40);
+    leftRunAnimTimer->setInterval(150 / speed);
     connect(leftRunAnimTimer, &QTimer::timeout, this, &Player::leftRunAnim);
     runLeftFrame = 0;
+
+    //checking if player is still on platform or above it
+    platformCheckerTimer = new QTimer(this);
+    connect(platformCheckerTimer, &QTimer::timeout, this, &Player::checkOnPlatform);
+    platformCheckerTimer->start(50);
+
 }
+
+
 
 void Player::draw(QGraphicsScene &scene) {
     if (image) {
@@ -83,6 +104,9 @@ void Player::draw(QGraphicsScene &scene) {
         scene.addItem(image);
     }
 }
+
+
+
 
 void Player::handleMovement(QKeyEvent* event) {
     if (event->key() == Qt::Key_Left) {
@@ -118,8 +142,7 @@ void Player::handleMovement(QKeyEvent* event) {
     } else if (event->key() == Qt::Key_Up) {
         handleUpMovement();
     } else if (event->key() == Qt::Key_Down) {
-        // handleDownMovement();
-        std::cout << "Down\n";
+
     }
 }
 
@@ -182,39 +205,35 @@ void Player::setStandingImage() {
 
 
 void Player::handleRightMovement() {
-    if(position.getX() >= (scene->width() - width)/2){
-        sceneX += 10;
-        for(auto item : scene->items()){
-            if(item != this->image){
-                item->moveBy(-10, 0);
-
+    if (position.getX() >= (scene->width() - width) / 2) {
+        sceneX += speed;
+        for (auto item : scene->items()) {
+            if (item != this->image) {
+                item->moveBy(-static_cast<qreal>(speed), 0);
             }
         }
-    }
-    else{
+    } else {
         int newX = position.getX() + speed;
         position.setX(newX);
         image->setPos(newX, position.getY());
     }
-
 }
 
 void Player::handleLeftMovement() {
-
-    if(position.getX() <= 50 && sceneX >= 10 ){
-        sceneX -= 10;
-        for(auto item : scene->items()){
-            if(item != this->image){
-                item->moveBy(10, 0);
+    if (position.getX() <= 50 && sceneX >= 10) {
+        sceneX -= speed;
+        for (auto item : scene->items()) {
+            if (item != this->image) {
+                item->moveBy(static_cast<qreal>(speed), 0);
             }
         }
-    }
-    else{
+    } else {
         int newX = position.getX() - speed;
         position.setX(newX);
         image->setPos(newX, position.getY());
     }
 }
+
 
 void Player::runAnim() {
     if (runFrame >= runFrames.size()) {
@@ -232,13 +251,32 @@ void Player::leftRunAnim() {
     runLeftFrame++;
 }
 
+
+void Player::checkOnPlatform() {
+    bool onPlat = false;
+    for(auto platform:platforms) {
+        if (position.getX() + sceneX >= platform->getPosition().getX() &&
+                position.getX() + sceneX + width/2 <= platform->getPosition().getX() + platform->getWidth()){
+                onPlat = true;
+                break;
+        }
+    }
+    if(onPlat){
+        std::cout<<"yes ";
+    }
+}
+
+
+
 Player::~Player() {
     delete heightAnimator;
     delete jumpAnimTimer;
     delete runAnimTimer;
     delete leftRunAnimTimer;
+    delete platformCheckerTimer;
     qDeleteAll(jumpLeftFrames);
     qDeleteAll(leftRunFrames);
     qDeleteAll(jumpFrames);
     qDeleteAll(runFrames);
 }
+

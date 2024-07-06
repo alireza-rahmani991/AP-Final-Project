@@ -3,11 +3,13 @@
 
 #include "position.h"
 #include "bodyobject.h"
+#include "Platform.h"
 #include <QKeyEvent>
 #include <QPropertyAnimation>
 #include <QGraphicsView>
 #include <QList>
 #include <QTimer>
+#include <vector>
 
 class Player : public BodyObject
 {
@@ -32,13 +34,16 @@ private:
     QTimer* jumpAnimTimer;
     QTimer* runAnimTimer;
     QTimer* leftRunAnimTimer;
+    QTimer* platformCheckerTimer;
     bool jumped{};
     bool isRunningLeft;
     QGraphicsScene* scene;
     int sceneX{};
+    std::vector<Platform*> platforms;
+
 
 public:
-    Player(int Width, int Height, Position _position, QGraphicsPixmapItem* standRightImage,QGraphicsPixmapItem* standLeftImage, int Speed, Position Velocity, int groundY, QGraphicsScene* scene);
+    Player(int Width, int Height, Position _position, QGraphicsPixmapItem* standRightImage,QGraphicsPixmapItem* standLeftImage, int Speed, Position Velocity, int groundY, QGraphicsScene* scene,const std::vector<Platform*>& platforms);
     void draw(QGraphicsScene &scene) override;
     ~Player();
     void handleRightMovement();
@@ -56,7 +61,7 @@ public slots:
     void leftRunAnim();
     void handleGravity();
     void setStandingImage();
-
+    void checkOnPlatform();
 
 };
 
