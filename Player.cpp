@@ -92,7 +92,6 @@ Player::Player(int Width, int Height, Position _position, QGraphicsPixmapItem* s
     platformCheckerTimer = new QTimer(this);
     connect(platformCheckerTimer, &QTimer::timeout, this, &Player::checkOnPlatform);
     platformCheckerTimer->start(50);
-
 }
 
 
@@ -165,14 +164,15 @@ void Player::handleUpMovement() {
     // jumping then activating gravity
     heightAnimator->stop();
     heightAnimator->setStartValue(position.getY());
-    heightAnimator->setEndValue(groundY - 150);
-    heightAnimator->setDuration(500);
+    heightAnimator->setEndValue(groundY - 300);
+    heightAnimator->setDuration(1000);
     heightAnimator->setEasingCurve(QEasingCurve::OutQuad);
     connect(heightAnimator, &QPropertyAnimation::valueChanged, this, [this](const QVariant &value) {
         position.setY(value.toInt());
         image->setPos(position.getX(), position.getY());
     });
     heightAnimator->start();
+    platformCheckerTimer->stop();
 }
 
 void Player::jumpAnim() {
@@ -201,6 +201,7 @@ void Player::setStandingImage() {
         image->setPos(position.getX(), position.getY());
         jumped = false;
     }
+    platformCheckerTimer->start();
 }
 
 
@@ -254,18 +255,31 @@ void Player::leftRunAnim() {
 
 void Player::checkOnPlatform() {
     bool onPlat = false;
-    for(auto platform:platforms) {
-        if (position.getX() + sceneX >= platform->getPosition().getX() &&
-                position.getX() + sceneX + width/2 <= platform->getPosition().getX() + platform->getWidth()){
-                onPlat = true;
-                break;
+    int tolerance = 2; // Adjust this value based on the gap size
+
+    for (auto platform : platforms) {
+        // Check if the player's X position + width overlaps with the platform's X position + width
+        if ((position.getX() + sceneX + width > platform->getPosition().getX() - tolerance) &&
+            (position.getX() + sceneX < platform->getPosition().getX() + platform->getWidth() + tolerance)) {
+            onPlat = true;
+            break;
+
         }
     }
-    if(onPlat){
-        std::cout<<"yes ";
+    if(!onPlat && !falling){
+        heightAnimator->stop();
+        heightAnimator->setStartValue(position.getY());
+        heightAnimator->setEndValue(5000);
+        heightAnimator->setDuration(2000);
+        heightAnimator->setEasingCurve(QEasingCurve::InQuad);
+        heightAnimator->start();
+        falling = true;
+    }
+    if(onPlat && falling){
+        falling = false;
+        handleGravity();
     }
 }
-
 
 
 Player::~Player() {

@@ -37,6 +37,7 @@ private:
     QTimer* platformCheckerTimer;
     bool jumped{};
     bool isRunningLeft;
+    bool falling{};
     QGraphicsScene* scene;
     int sceneX{};
     std::vector<Platform*> platforms;
