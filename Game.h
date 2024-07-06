@@ -19,12 +19,13 @@ protected:
     void keyReleaseEvent(QKeyEvent *event) override;
     void checkPlayerYPos();
     void handleGameOver();
-    void resetGame();
+    void startGame();
 
 
 
 private:
     std::vector<Platform*> platforms;
+    QTimer* gameOverTimer;
     Player *player;
     QGraphicsScene* scene;
 };
