@@ -7,6 +7,8 @@
 #include "platform.h"
 #include <vector>
 #include <QGraphicsItem>
+#include <QMediaPlayer>
+#include <QMediaContent>
 
 
 class Game : public QGraphicsView
@@ -19,15 +21,19 @@ protected:
     void keyReleaseEvent(QKeyEvent *event) override;
     void checkPlayerYPos();
     void handleGameOver();
-    void startGame();
+    void resetGame();
 
 
 
 private:
     std::vector<Platform*> platforms;
-    QTimer* gameOverTimer;
     Player *player;
     QGraphicsScene* scene;
+    Position lastPosition;
+    QPointF lastScrollPosition;
+    QAudioOutput *audioOutput;
+    QBuffer *buffer;
+    QMediaPlayer* mediaPlayer;
 };
 
 #endif
