@@ -138,20 +138,30 @@ void Player::handleMovement(QKeyEvent* event) {
             runAnimTimer->stop();
             setStandingImage();
         }
-    } else if (event->key() == Qt::Key_Up) {
+    } else if (event->key() == Qt::Key_Up && position.getY() >= 320) {
         handleUpMovement();
     } else if (event->key() == Qt::Key_Down) {
-
+        std::cout<<position.getX()<<"   "<<position.getY()<<"  "<<sceneX<<std::endl;
     }
 }
 
 void Player::handleGravity() {
-    heightAnimator->stop();
-    heightAnimator->setStartValue(position.getY());
-    heightAnimator->setEndValue(groundY);
-    heightAnimator->setDuration(700);
-    heightAnimator->setEasingCurve(QEasingCurve::InQuad);
-    heightAnimator->start();
+    if(position.getX() + sceneX + width >= 1960 && position.getX() + sceneX <= 2400 && position.getY() <= 400){
+        heightAnimator->stop();
+        heightAnimator->setStartValue(position.getY());
+        heightAnimator->setEndValue(330);
+        heightAnimator->setDuration(700);
+        heightAnimator->setEasingCurve(QEasingCurve::InQuad);
+        heightAnimator->start();
+    }
+    else{
+        heightAnimator->stop();
+        heightAnimator->setStartValue(position.getY());
+        heightAnimator->setEndValue(groundY);
+        heightAnimator->setDuration(700);
+        heightAnimator->setEasingCurve(QEasingCurve::InQuad);
+        heightAnimator->start();
+    }
     if (jumped) {
         setStandingImage();
     }

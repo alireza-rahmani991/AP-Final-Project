@@ -17,7 +17,7 @@ void Game::keyReleaseEvent(QKeyEvent *event) {
 }
 
 void Game::checkPlayerYPos() {
-    if (player->getPosition().getY() > 2000) {
+    if (player->getPosition().getY() > 1000) {
         QTimer::singleShot(500, this, &Game::handleGameOver);
     }
 }
@@ -33,6 +33,11 @@ void Game::handleGameOver() {
         delete plt;
     }
     platforms.clear();
+
+    for (auto decorator: decorators) {
+        delete decorator;
+    }
+    decorators.clear();
 
     for (auto enemy : enemies) {
         delete enemy;
@@ -65,26 +70,40 @@ void Game::startGame() {
     int hillHeight = screenHeight / 3;
     int hillWidth = screenWidth / 3;
 
+
+    //adding decorations
     Position backgroundPosition(0, 0);
     auto backgroundImage = new QGraphicsPixmapItem(QPixmap(":/img/background.png"));
     Decorator *background = new Decorator(width(), height(), backgroundPosition, backgroundImage);
     background->draw(*scene);
+    decorators.push_back(background);
 
     auto hillImage1 = new QGraphicsPixmapItem(QPixmap(":/img/hill1.png"));
-    Position hillPos1(100, screenHeight - (platformHeight + 1.5 * hillHeight + 20));
-    Decorator *hill1 = new Decorator(hillWidth, hillHeight, hillPos1, hillImage1);
+    Position hillPos1(100, screenHeight - (platformHeight + 1.5 * hillHeight + 25));
+    Decorator *hill1 = new Decorator(hillWidth , hillHeight + 50, hillPos1, hillImage1);
     hill1->draw(*scene);
+    decorators.push_back(hill1);
 
-    auto hillImage3 = new QGraphicsPixmapItem(QPixmap(":/img/hill3.png"));
-    Position hillPos3(900, screenHeight - (platformHeight + 1.5 * hillHeight + 20));
-    Decorator *hill3 = new Decorator(hillWidth, hillHeight, hillPos3, hillImage3);
+    auto hillImage2 = new QGraphicsPixmapItem(QPixmap(":/img/hill3.png"));
+    Position hillPos2(2500, screenHeight - (platformHeight + 1.5 * hillHeight + 20));
+    Decorator *hill2 = new Decorator(hillWidth, hillHeight, hillPos2, hillImage2);
+    hill2->draw(*scene);
+    decorators.push_back(hill2);
+
+    auto hillImage3 = new QGraphicsPixmapItem(QPixmap(":/img/hill5.png"));
+    Position hillPos3(1200, screenHeight - (platformHeight + 1.5 * hillHeight + 20));
+    Decorator *hill3 = new Decorator(hillWidth / 2, hillHeight / 2, hillPos3, hillImage3);
     hill3->draw(*scene);
+    decorators.push_back(hill3);
 
-    auto hillImage5 = new QGraphicsPixmapItem(QPixmap(":/img/hill5.png"));
-    Position hillPos5(600, screenHeight - (platformHeight + 1.5 * hillHeight + 20));
-    Decorator *hill5 = new Decorator(hillWidth / 2, hillHeight / 2, hillPos5, hillImage5);
-    hill5->draw(*scene);
+    auto hillImage4 = new QGraphicsPixmapItem(QPixmap(":/img/hill1.png"));
+    Position hillPos4(4000, screenHeight - (platformHeight + 1.5 * hillHeight + 25));
+    Decorator *hill4 = new Decorator(hillWidth , hillHeight + 50, hillPos4, hillImage4);
+    hill4->draw(*scene);
+    decorators.push_back(hill4);
 
+
+    //adding platforms
     int platformWidth = screenWidth / 3;
 
     auto img1 = new QGraphicsPixmapItem(QPixmap(":/img/platform.png"));
@@ -106,6 +125,29 @@ void Game::startGame() {
     Position pos4(platformWidth * 3.5, screenHeight - platformHeight);
     Platform *plt4 = new Platform(platformWidth + 2, platformHeight, pos4, img4);
     platforms.push_back(plt4);
+    auto img5 = new QGraphicsPixmapItem(QPixmap(":/img/platform.png"));
+    Position pos5(platformWidth * 4.5, screenHeight - platformHeight);
+    Platform *plt5 = new Platform(platformWidth + 2, platformHeight, pos5, img5);
+    platforms.push_back(plt5);
+    auto img6 = new QGraphicsPixmapItem(QPixmap(":/img/platform.png"));
+    Position pos6(platformWidth * 5.5, screenHeight - platformHeight);
+    Platform *plt6 = new Platform(platformWidth + 2, platformHeight, pos6, img6);
+    platforms.push_back(plt6);
+
+    auto img7 = new QGraphicsPixmapItem(QPixmap(":/img/platform.png"));
+    Position pos7(platformWidth * 3.8, screenHeight - 3 * platformHeight);
+    Platform *plt7 = new Platform(platformWidth + 2, platformHeight, pos7, img7);
+    platforms.push_back(plt7);
+
+    auto img8 = new QGraphicsPixmapItem(QPixmap(":/img/platform.png"));
+    Position pos8(platformWidth * 7.1, screenHeight - platformHeight);
+    Platform *plt8 = new Platform(platformWidth + 2, platformHeight, pos8, img8);
+    platforms.push_back(plt8);
+
+    auto img9 = new QGraphicsPixmapItem(QPixmap(":/img/platform.png"));
+    Position pos9(platformWidth * 8.1, screenHeight - platformHeight);
+    Platform *plt9 = new Platform(platformWidth + 2, platformHeight, pos9, img9);
+    platforms.push_back(plt9);
 
     for (auto platform : platforms) {
         platform->draw(*scene);
@@ -116,6 +158,7 @@ void Game::startGame() {
     int groundY = screenHeight - 3 * platformHeight;
     Position playerPosition(10, groundY);
 
+    //adding player to the scene
     auto playerImage = new QGraphicsPixmapItem(QPixmap(":/img/Player_standing.png"));
     auto standLeftImg = new QGraphicsPixmapItem(QPixmap(":/img/standingLeft.png"));
 
@@ -123,19 +166,27 @@ void Game::startGame() {
     player->draw(*scene);
     int boostWidth = 70;
     int boostHeight = 70;
+
+    //adding boosters to the scene
     auto boosterImage = new QGraphicsPixmapItem(QPixmap(":/img/boost"));
-    Position boosterPos(900,groundY + 150);
+    Position boosterPos(600,groundY + 150);
     boosters.push_back(new Booster(boostWidth, boostHeight, boosterPos, boosterImage));
+
+    auto boosterImage2 = new QGraphicsPixmapItem(QPixmap(":/img/boost"));
+    Position boosterPos2(3000,groundY + 150);
+    boosters.push_back(new Booster(boostWidth, boostHeight, boosterPos2, boosterImage2));
 
     for(auto booster:boosters){
         booster->draw(*scene);
     }
 
+
+    //adding enemies
     int enemyWidth = 100;
     int enemyHeight = 100;
     auto enemyImage2 = new QGraphicsPixmapItem(QPixmap(":/img/enemyLeft"));
-    Position enemyPos2(500, groundY + 140);
-    enemies.push_back(new Enemy(enemyWidth, enemyHeight, enemyPos2, enemyImage2, 5, 400, 600));
+    Position enemyPos2(400, groundY + 140);
+    enemies.push_back(new Enemy(enemyWidth, enemyHeight, enemyPos2, enemyImage2, 5, 300, 500));
 
     for (auto enemy : enemies) {
         enemy->draw(*scene);
