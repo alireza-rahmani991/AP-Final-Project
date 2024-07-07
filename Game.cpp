@@ -1,8 +1,10 @@
 #include "Game.h"
+#include <QMessageBox>
 
 Game::Game() : gameOverTimer(new QTimer(this)),boostTimer(new QTimer(this)) {
     connect(gameOverTimer, &QTimer::timeout, this, &Game::checkPlayerYPos);
     connect(gameOverTimer, &QTimer::timeout, this, &Game::checkCollisions);
+    connect(gameOverTimer, &QTimer::timeout, this, &Game::handleVictory);
     connect(boostTimer, &QTimer::timeout, this, &Game::endBoost);
     startGame();
 }
@@ -196,6 +198,7 @@ void Game::startGame() {
 }
 
 void Game::checkCollisions() {
+
     for (auto it = enemies.begin(); it != enemies.end();) {
         Enemy* enemy = *it;
 
@@ -208,21 +211,21 @@ void Game::checkCollisions() {
                 continue;
             }
             if(!isBoosted){
-            if (player->getPosition().getY() <= 530 && player->getPosition().getY() >= 450) {
+                if (player->getPosition().getY() <= 530 && player->getPosition().getY() >= 450) {
 
-                scene->removeItem(enemy->getGraphicsItem());
-                delete enemy;
-                it = enemies.erase(it);
-                continue;
-            } else if (player->getPosition().getY() == 534) {
-                for (auto enemy : enemies) {
                     scene->removeItem(enemy->getGraphicsItem());
                     delete enemy;
+                    it = enemies.erase(it);
+                    continue;
+                } else if (player->getPosition().getY() == 534) {
+                    for (auto enemy : enemies) {
+                        scene->removeItem(enemy->getGraphicsItem());
+                        delete enemy;
+                    }
+                    enemies.clear();
+                    startGame();
+                    return;
                 }
-                enemies.clear();
-                startGame();
-                return;
-            }
             }
         }
         ++it;
@@ -230,7 +233,7 @@ void Game::checkCollisions() {
     for (auto it = boosters.begin(); it != boosters.end();) {
         Booster *booster = *it;
         if (player->getPosition().getX() + player->getWidth() + player->getSceneX() >= booster->getPosition().getX() &&
-                player->getPosition().getX() + player->getWidth() + player->getSceneX() <= booster->getPosition().getX() + booster->getWidth() ) {
+            player->getPosition().getX() + player->getWidth() + player->getSceneX() <= booster->getPosition().getX() + booster->getWidth() ) {
             if (player->getPosition().getY() == 534) {
                 scene->removeItem(booster->getGraphicsItem());
                 delete booster;
@@ -258,4 +261,13 @@ void Game::activateBoost() {
     player->getRunAnimTimer()->setInterval(200/player->getSpeed());
     player->getLeftRunAnimTimer()->setInterval(200/player->getSpeed());
     boostTimer->start(5000);
+}
+
+void Game::handleVictory() {
+    if (player->getPosition().getX() + player->getSceneX() == 3000) {
+        QMessageBox msgBox;
+        msgBox.setText("Congratulations! You won!");
+        msgBox.exec();
+        close();
+    }
 }

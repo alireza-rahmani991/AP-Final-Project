@@ -26,6 +26,7 @@ protected:
     void startGame();
     void checkCollisions();
     void activateBoost();
+    void handleVictory();
 
 public slots:
     void endBoost();
