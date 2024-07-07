@@ -66,7 +66,7 @@ Player::Player(int Width, int Height, Position _position, QGraphicsPixmapItem* s
     }
     //connecting the animation
     runAnimTimer = new QTimer(this);
-    runAnimTimer->setInterval(150 / speed);
+    runAnimTimer->setInterval(200 / speed);
     connect(runAnimTimer, &QTimer::timeout, this, &Player::runAnim);
 
 
@@ -84,7 +84,7 @@ Player::Player(int Width, int Height, Position _position, QGraphicsPixmapItem* s
     }
     //connecting the animation
     leftRunAnimTimer = new QTimer(this);
-    leftRunAnimTimer->setInterval(150 / speed);
+    leftRunAnimTimer->setInterval(200 / speed);
     connect(leftRunAnimTimer, &QTimer::timeout, this, &Player::leftRunAnim);
     runLeftFrame = 0;
 
@@ -292,5 +292,25 @@ Player::~Player() {
     qDeleteAll(leftRunFrames);
     qDeleteAll(jumpFrames);
     qDeleteAll(runFrames);
+}
+
+int Player::getSpeed() const {
+    return speed;
+}
+
+void Player::setSpeed(int speed) {
+    this->speed = speed;
+}
+
+QTimer *Player::getRunAnimTimer() const {
+    return runAnimTimer;
+}
+
+QTimer *Player::getLeftRunAnimTimer() const {
+    return leftRunAnimTimer;
+}
+
+int Player::getSceneX() const {
+    return sceneX;
 }
 

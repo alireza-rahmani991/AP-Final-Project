@@ -7,6 +7,7 @@
 #include "Player.h"
 #include "Platform.h"
 #include "Enemy.h"
+#include "Booster.h"
 #include <vector>
 #include <QGraphicsItem>
 
@@ -24,16 +25,22 @@ protected:
     void handleGameOver();
     void startGame();
     void checkCollisions();
+    void activateBoost();
 
-
+public slots:
+    void endBoost();
 
 private:
     std::vector<Platform*> platforms;
     std::vector<Decorator*> decorators;
     std::vector<Enemy*> enemies;
+    std::vector<Booster*> boosters;
     QTimer* gameOverTimer;
+    QTimer* boostTimer;
     Player *player;
     QGraphicsScene* scene;
+    bool isBoosted{};
+
 };
 
 #endif

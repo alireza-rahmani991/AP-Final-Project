@@ -52,6 +52,12 @@ public:
     void handleUpMovement();
     void handleDownMovement();
     void handleMovement(QKeyEvent* event);
+    int getSpeed() const;
+    void setSpeed(int speed);
+    QTimer *getRunAnimTimer() const;
+    QTimer *getLeftRunAnimTimer() const;
+
+    int getSceneX() const;
 
     qreal y() const { return position.getY(); }
     void setY(qreal h) { position.setY(h); }
