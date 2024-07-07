@@ -134,8 +134,8 @@ void Game::startGame() {
     int enemyWidth = 100;
     int enemyHeight = 100;
     auto enemyImage2 = new QGraphicsPixmapItem(QPixmap(":/img/enemyLeft"));
-    Position enemyPos2(700, groundY + 140);
-    enemies.push_back(new Enemy(enemyWidth, enemyHeight, enemyPos2, enemyImage2, 5, 700, 900));
+    Position enemyPos2(500, groundY + 140);
+    enemies.push_back(new Enemy(enemyWidth, enemyHeight, enemyPos2, enemyImage2, 5, 400, 600));
 
     for (auto enemy : enemies) {
         enemy->draw(*scene);
@@ -150,8 +150,13 @@ void Game::checkCollisions() {
 
         if (player->getPosition().getX() + player->getWidth() >= enemy->getPosition().getX()
             && player->getPosition().getX() <= enemy->getPosition().getX() + enemy->getWidth()) {
-
-
+            if(isBoosted){
+                scene->removeItem(enemy->getGraphicsItem());
+                delete enemy;
+                it = enemies.erase(it);
+                continue;
+            }
+            if(!isBoosted){
             if (player->getPosition().getY() <= 530 && player->getPosition().getY() >= 450) {
 
                 scene->removeItem(enemy->getGraphicsItem());
@@ -166,6 +171,7 @@ void Game::checkCollisions() {
                 enemies.clear();
                 startGame();
                 return;
+            }
             }
         }
         ++it;
