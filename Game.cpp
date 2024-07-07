@@ -1,8 +1,9 @@
 #include "Game.h"
 
-Game::Game() : gameOverTimer(new QTimer(this)) {
+Game::Game() : gameOverTimer(new QTimer(this)),boostTimer(new QTimer(this)) {
     connect(gameOverTimer, &QTimer::timeout, this, &Game::checkPlayerYPos);
     connect(gameOverTimer, &QTimer::timeout, this, &Game::checkCollisions);
+    connect(boostTimer, &QTimer::timeout, this, &Game::endBoost);
     startGame();
 }
 
@@ -37,6 +38,11 @@ void Game::handleGameOver() {
         delete enemy;
     }
     enemies.clear();
+    for (auto booster : boosters) {
+        delete booster;
+    }
+    boosters.clear();
+
 
     startGame();
 }
@@ -115,6 +121,15 @@ void Game::startGame() {
 
     player = new Player(playerWidth, playerHeight, playerPosition, playerImage, standLeftImg, 10, Position(0, 0), groundY, scene, platforms);
     player->draw(*scene);
+    int boostWidth = 70;
+    int boostHeight = 70;
+    auto boosterImage = new QGraphicsPixmapItem(QPixmap(":/img/boost"));
+    Position boosterPos(900,groundY + 150);
+    boosters.push_back(new Booster(boostWidth, boostHeight, boosterPos, boosterImage));
+
+    for(auto booster:boosters){
+        booster->draw(*scene);
+    }
 
     int enemyWidth = 100;
     int enemyHeight = 100;
@@ -126,7 +141,7 @@ void Game::startGame() {
         enemy->draw(*scene);
     }
 
-    gameOverTimer->start(50); // Restart the timer
+    gameOverTimer->start(50);
 }
 
 void Game::checkCollisions() {
@@ -155,4 +170,35 @@ void Game::checkCollisions() {
         }
         ++it;
     }
+    for (auto it = boosters.begin(); it != boosters.end();) {
+        Booster *booster = *it;
+        if (player->getPosition().getX() + player->getWidth() + player->getSceneX() >= booster->getPosition().getX() &&
+                player->getPosition().getX() + player->getWidth() + player->getSceneX() <= booster->getPosition().getX() + booster->getWidth() ) {
+            if (player->getPosition().getY() == 534) {
+                scene->removeItem(booster->getGraphicsItem());
+                delete booster;
+                it = boosters.erase(it);
+                activateBoost();
+                continue;
+            }
+        }
+        it++;
+    }
+}
+
+void Game::endBoost() {
+    isBoosted = false;
+    player->setSpeed(player->getSpeed() / 2);
+    player->getRunAnimTimer()->setInterval(200/player->getSpeed());
+    player->getLeftRunAnimTimer()->setInterval(200/player->getSpeed());
+    boostTimer->stop();
+
+}
+
+void Game::activateBoost() {
+    isBoosted = true;
+    player->setSpeed(player->getSpeed() * 2);
+    player->getRunAnimTimer()->setInterval(200/player->getSpeed());
+    player->getLeftRunAnimTimer()->setInterval(200/player->getSpeed());
+    boostTimer->start(5000);
 }

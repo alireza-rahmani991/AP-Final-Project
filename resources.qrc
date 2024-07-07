@@ -71,7 +71,8 @@
         <file>img/runLeft28.png</file>
         <file>img/runLeft29.png</file>
         <file>img/runLeft30.png</file>
-        <file>img/enemyLeft.png</file>
         <file>img/enemyRight.png</file>
+        <file>img/enemyLeft.png</file>
+        <file>img/boost.png</file>
     </qresource>
 </RCC>
