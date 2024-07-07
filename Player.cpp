@@ -142,7 +142,7 @@ void Player::handleMovement(QKeyEvent* event) {
         }
     }
     // Handling up movement
-    else if (event->key() == Qt::Key_Up && position.getY() >= 320) {
+    else if (event->key() == Qt::Key_Space && position.getY() >= 320) {
         handleUpMovement();
     }
     // Handling down movement
