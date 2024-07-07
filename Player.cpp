@@ -6,7 +6,7 @@
 #include <QGraphicsScene>
 
 Player::Player(int Width, int Height, Position _position, QGraphicsPixmapItem* standRightImage, QGraphicsPixmapItem* standLeftImage, int Speed, Position Velocity, int groundY,QGraphicsScene* scene,const std::vector<Platform*>& platforms) :
-        BodyObject(Width, Height, _position, standRightImage), scene(scene), platforms(platforms)
+    BodyObject(Width, Height, _position, standRightImage), scene(scene), platforms(platforms)
 {
     this->groundY = groundY;
     speed = Speed;
@@ -21,7 +21,7 @@ Player::Player(int Width, int Height, Position _position, QGraphicsPixmapItem* s
 
 
 
-    //adding animation for jumping while running right
+    //Adding animation for jumping while running right
     auto pixmap = new QPixmap(":/img/running21.png");
     auto scaledPixmap = pixmap->scaled(animWidth, animHeight, Qt::KeepAspectRatioByExpanding);
     jumpFrames.append(new QPixmap(scaledPixmap));
@@ -32,7 +32,7 @@ Player::Player(int Width, int Height, Position _position, QGraphicsPixmapItem* s
 
 
 
-    //adding animation for jumping while running left
+    //Adding animation for jumping while running left
     pixmap = new QPixmap(":/img/runLeft21.png");
     scaledPixmap = pixmap->scaled(animWidth, animHeight, Qt::KeepAspectRatioByExpanding);
     jumpLeftFrames.append(new QPixmap(scaledPixmap));
@@ -42,18 +42,18 @@ Player::Player(int Width, int Height, Position _position, QGraphicsPixmapItem* s
     jumpLeftFrames.append(new QPixmap(scaledPixmap));
 
     jumpAnimTimer = new QTimer(this);
-    jumpAnimTimer->setInterval(0); // Set an appropriate interval for the jump animation
+    jumpAnimTimer->setInterval(0);
     connect(jumpAnimTimer, &QTimer::timeout, this, &Player::jumpAnim);
 
 
 
-    //connecting to gravity
+    //Connecting to gravity
     heightAnimator = new QPropertyAnimation(this, "height", this);
     connect(heightAnimator, &QPropertyAnimation::finished, this, &Player::handleGravity);
 
 
 
-    //adding animation for running right
+    //Adding animation for running right
     for (int i = 1; i <= 30; i++) {
         auto pixmapPath = QString(":/img/running%1.png").arg(i);
         auto pixmap2 = new QPixmap(pixmapPath);
@@ -64,14 +64,14 @@ Player::Player(int Width, int Height, Position _position, QGraphicsPixmapItem* s
             runFrames.append(new QPixmap(scaledPixmap2));
         }
     }
-    //connecting the animation
+    //Connecting the animation
     runAnimTimer = new QTimer(this);
     runAnimTimer->setInterval(200 / speed);
     connect(runAnimTimer, &QTimer::timeout, this, &Player::runAnim);
 
 
 
-    //adding animation for running left
+    //Adding animation for running left
     for (int i = 1; i <= 30; i++) {
         auto pixmapPath = QString(":/img/runLeft%1.png").arg(i);
         auto pixmap3 = new QPixmap(pixmapPath);
@@ -82,13 +82,13 @@ Player::Player(int Width, int Height, Position _position, QGraphicsPixmapItem* s
             leftRunFrames.append(new QPixmap(scaledPixmap3));
         }
     }
-    //connecting the animation
+    //Connecting the animation
     leftRunAnimTimer = new QTimer(this);
     leftRunAnimTimer->setInterval(200 / speed);
     connect(leftRunAnimTimer, &QTimer::timeout, this, &Player::leftRunAnim);
     runLeftFrame = 0;
 
-    //checking if player is still on platform or above it
+    //Checking if player is still on platform or above it
     platformCheckerTimer = new QTimer(this);
     connect(platformCheckerTimer, &QTimer::timeout, this, &Player::checkOnPlatform);
     platformCheckerTimer->start(50);
@@ -104,16 +104,15 @@ void Player::draw(QGraphicsScene &scene) {
     }
 }
 
-
-
-
 void Player::handleMovement(QKeyEvent* event) {
+    // Handling left movement
     if (event->key() == Qt::Key_Left) {
-        if(position.getX() <= 0){
+        // Check if the player is at the left edge of the screen
+        if (position.getX() <= 0) {
+            // Stop the left run animation and set the standing image
             leftRunAnimTimer->stop();
             setStandingImage();
-        }
-        else{
+        } else {
             if (event->type() == QEvent::KeyPress) {
                 handleLeftMovement();
                 isRunningLeft = true;
@@ -126,7 +125,10 @@ void Player::handleMovement(QKeyEvent* event) {
                 setStandingImage();
             }
         }
-    } else if (event->key() == Qt::Key_Right) {
+    }
+    // Handling right movement
+    else if (event->key() == Qt::Key_Right) {
+        // Handle key press and release events for right movement
         if (event->type() == QEvent::KeyPress) {
             handleRightMovement();
             isRunningLeft = false;
@@ -138,30 +140,39 @@ void Player::handleMovement(QKeyEvent* event) {
             runAnimTimer->stop();
             setStandingImage();
         }
-    } else if (event->key() == Qt::Key_Up && position.getY() >= 320) {
+    }
+    // Handling up movement
+    else if (event->key() == Qt::Key_Up && position.getY() >= 320) {
         handleUpMovement();
-    } else if (event->key() == Qt::Key_Down) {
-        std::cout<<position.getX()<<"   "<<position.getY()<<"  "<<sceneX<<std::endl;
+    }
+    // Handling down movement
+    else if (event->key() == Qt::Key_Down) {
+        std::cout << position.getX() << "   " << position.getY() << "  " << sceneX << std::endl;
     }
 }
 
 void Player::handleGravity() {
-    if(position.getX() + sceneX + width >= 1960 && position.getX() + sceneX <= 2400 && position.getY() <= 400){
+    if (position.getX() + sceneX + width >= 1960 && position.getX() + sceneX <= 2400 && position.getY() <= 400) {
         heightAnimator->stop();
+
+        // Set up a new animation to move the player up
         heightAnimator->setStartValue(position.getY());
         heightAnimator->setEndValue(330);
         heightAnimator->setDuration(700);
         heightAnimator->setEasingCurve(QEasingCurve::InQuad);
         heightAnimator->start();
-    }
-    else{
+    } else {
         heightAnimator->stop();
+
+        // Set up a new animation to move the player to the ground level
         heightAnimator->setStartValue(position.getY());
         heightAnimator->setEndValue(groundY);
         heightAnimator->setDuration(700);
         heightAnimator->setEasingCurve(QEasingCurve::InQuad);
         heightAnimator->start();
     }
+
+    // If the player has jumped, set the standing image
     if (jumped) {
         setStandingImage();
     }
@@ -201,11 +212,13 @@ void Player::jumpAnim() {
 }
 
 void Player::setStandingImage() {
+    // Setting the standing left image
     if(isRunningLeft){
         image->setPixmap(standLeftImg.scaled(width, height, Qt::KeepAspectRatioByExpanding));
         image->setPos(position.getX(), position.getY());
         jumped = false;
     }
+    // Setting the standing left image
     else{
         image->setPixmap(standRightImg.scaled(width, height, Qt::KeepAspectRatioByExpanding));
         image->setPos(position.getX(), position.getY());
@@ -217,6 +230,7 @@ void Player::setStandingImage() {
 
 void Player::handleRightMovement() {
     if (position.getX() >= (scene->width() - width) / 2) {
+        // Moving the scene while the player's moving
         sceneX += speed;
         for (auto item : scene->items()) {
             if (item != this->image) {
@@ -232,6 +246,7 @@ void Player::handleRightMovement() {
 
 void Player::handleLeftMovement() {
     if (position.getX() <= 50 && sceneX >= 10) {
+        // Moving the scene while the player's moving
         sceneX -= speed;
         for (auto item : scene->items()) {
             if (item != this->image) {
@@ -265,10 +280,10 @@ void Player::leftRunAnim() {
 
 void Player::checkOnPlatform() {
     bool onPlat = false;
-    int tolerance = 2; // Adjust this value based on the gap size
+    int tolerance = 2;
 
     for (auto platform : platforms) {
-        // Check if the player's X position + width overlaps with the platform's X position + width
+        // Check if the player overlaps with the platform
         if ((position.getX() + sceneX + width > platform->getPosition().getX() - tolerance) &&
             (position.getX() + sceneX < platform->getPosition().getX() + platform->getWidth() + tolerance)) {
             onPlat = true;
@@ -323,4 +338,3 @@ QTimer *Player::getLeftRunAnimTimer() const {
 int Player::getSceneX() const {
     return sceneX;
 }
-

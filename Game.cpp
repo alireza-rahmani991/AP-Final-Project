@@ -1,7 +1,9 @@
 #include "Game.h"
 #include <QMessageBox>
 
-Game::Game() : gameOverTimer(new QTimer(this)),boostTimer(new QTimer(this)) {
+Game::Game() :
+    // Setting the timer
+    gameOverTimer(new QTimer(this)),boostTimer(new QTimer(this)) {
     connect(gameOverTimer, &QTimer::timeout, this, &Game::checkPlayerYPos);
     connect(gameOverTimer, &QTimer::timeout, this, &Game::checkCollisions);
     connect(gameOverTimer, &QTimer::timeout, this, &Game::handleVictory);
@@ -25,7 +27,9 @@ void Game::checkPlayerYPos() {
 }
 
 void Game::handleGameOver() {
-    gameOverTimer->stop(); // Stop the timer before restarting the game
+    gameOverTimer->stop();
+
+    // Clearing all the objects in the game
     scene->clear();
 
     delete player;
@@ -50,9 +54,11 @@ void Game::handleGameOver() {
     }
     boosters.clear();
 
-
+    // Re-starting the game
     startGame();
 }
+
+
 
 void Game::startGame() {
     int platformHeight = 110;
@@ -73,7 +79,7 @@ void Game::startGame() {
     int hillWidth = screenWidth / 3;
 
 
-    //adding decorations
+    //Adding decorations
     Position backgroundPosition(0, 0);
     auto backgroundImage = new QGraphicsPixmapItem(QPixmap(":/img/background.png"));
     Decorator *background = new Decorator(width(), height(), backgroundPosition, backgroundImage);
@@ -105,7 +111,7 @@ void Game::startGame() {
     decorators.push_back(hill4);
 
 
-    //adding platforms
+    //Adding platforms
     int platformWidth = screenWidth / 3;
 
     auto img1 = new QGraphicsPixmapItem(QPixmap(":/img/platform.png"));
@@ -160,7 +166,7 @@ void Game::startGame() {
     int groundY = screenHeight - 3 * platformHeight;
     Position playerPosition(10, groundY);
 
-    //adding player to the scene
+    //Adding the player to the scene
     auto playerImage = new QGraphicsPixmapItem(QPixmap(":/img/Player_standing.png"));
     auto standLeftImg = new QGraphicsPixmapItem(QPixmap(":/img/standingLeft.png"));
 
@@ -169,7 +175,7 @@ void Game::startGame() {
     int boostWidth = 70;
     int boostHeight = 70;
 
-    //adding boosters to the scene
+    //Adding boosters to the scene
     auto boosterImage = new QGraphicsPixmapItem(QPixmap(":/img/boost"));
     Position boosterPos(600,groundY + 150);
     boosters.push_back(new Booster(boostWidth, boostHeight, boosterPos, boosterImage));
@@ -183,7 +189,7 @@ void Game::startGame() {
     }
 
 
-    //adding enemies
+    //Adding enemies
     int enemyWidth = 100;
     int enemyHeight = 100;
     auto enemyImage2 = new QGraphicsPixmapItem(QPixmap(":/img/enemyLeft"));
@@ -198,26 +204,31 @@ void Game::startGame() {
 }
 
 void Game::checkCollisions() {
-
+    // Iterate through the list of enemies
     for (auto it = enemies.begin(); it != enemies.end();) {
         Enemy* enemy = *it;
 
+        // Check if the player has collided with the enemy horizontally
         if (player->getPosition().getX() + player->getWidth() >= enemy->getPosition().getX()
             && player->getPosition().getX() <= enemy->getPosition().getX() + enemy->getWidth()) {
-            if(isBoosted){
+
+            if (isBoosted) {
                 scene->removeItem(enemy->getGraphicsItem());
                 delete enemy;
                 it = enemies.erase(it);
                 continue;
             }
-            if(!isBoosted){
-                if (player->getPosition().getY() <= 530 && player->getPosition().getY() >= 450) {
 
+            if (!isBoosted) {
+                // Check if the player is in a vertical range
+                if (player->getPosition().getY() <= 530 && player->getPosition().getY() >= 450) {
+                    // Destroy the enemy
                     scene->removeItem(enemy->getGraphicsItem());
                     delete enemy;
                     it = enemies.erase(it);
                     continue;
                 } else if (player->getPosition().getY() == 534) {
+                    // Destroy all enemies and restart the game
                     for (auto enemy : enemies) {
                         scene->removeItem(enemy->getGraphicsItem());
                         delete enemy;
@@ -228,13 +239,19 @@ void Game::checkCollisions() {
                 }
             }
         }
+
         ++it;
     }
+
+    // Iterate through the list of boosters
     for (auto it = boosters.begin(); it != boosters.end();) {
         Booster *booster = *it;
+        // Check if the player has collided with the booster horizontally
         if (player->getPosition().getX() + player->getWidth() + player->getSceneX() >= booster->getPosition().getX() &&
             player->getPosition().getX() + player->getWidth() + player->getSceneX() <= booster->getPosition().getX() + booster->getWidth() ) {
+            // Check if the player is in a vertical position
             if (player->getPosition().getY() == 534) {
+                // Destroy the booster and activate the boost
                 scene->removeItem(booster->getGraphicsItem());
                 delete booster;
                 it = boosters.erase(it);
@@ -242,29 +259,40 @@ void Game::checkCollisions() {
                 continue;
             }
         }
+
         it++;
     }
 }
 
 void Game::endBoost() {
     isBoosted = false;
+
+    // Reducing the player's speed
     player->setSpeed(player->getSpeed() / 2);
+
+    // Updating the player's animation timers to match the new speed
     player->getRunAnimTimer()->setInterval(200/player->getSpeed());
     player->getLeftRunAnimTimer()->setInterval(200/player->getSpeed());
-    boostTimer->stop();
 
+    boostTimer->stop();
 }
+
 
 void Game::activateBoost() {
     isBoosted = true;
+
+    // Increasing the player's speed
     player->setSpeed(player->getSpeed() * 2);
+
+    // Update the player's animation timers to match the new speed
     player->getRunAnimTimer()->setInterval(200/player->getSpeed());
     player->getLeftRunAnimTimer()->setInterval(200/player->getSpeed());
+
     boostTimer->start(5000);
 }
 
 void Game::handleVictory() {
-    if (player->getPosition().getX() + player->getSceneX() == 3000) {
+    if (player->getPosition().getX() + player->getSceneX() == 3000) {// Reaching the end of the last platform
         QMessageBox msgBox;
         msgBox.setText("Congratulations! You won!");
         msgBox.exec();
