@@ -147,7 +147,7 @@ void Player::handleMovement(QKeyEvent* event) {
     }
     // Handling down movement
     else if (event->key() == Qt::Key_Down) {
-        std::cout << position.getX() << "   " << position.getY() << "  " << sceneX << std::endl;
+
     }
 }
 

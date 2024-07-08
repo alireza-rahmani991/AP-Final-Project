@@ -41,6 +41,7 @@ private:
     Player *player;
     QGraphicsScene* scene;
     bool isBoosted{};
+    bool gameOver{};
 
 };
 

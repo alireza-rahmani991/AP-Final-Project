@@ -21,8 +21,9 @@ void Game::keyReleaseEvent(QKeyEvent *event) {
 }
 
 void Game::checkPlayerYPos() {
-    if (player->getPosition().getY() > 1000) {
+    if (!gameOver && player->getPosition().getY() > 1000) {
         QTimer::singleShot(500, this, &Game::handleGameOver);
+        gameOver = true;
     }
 }
 
@@ -55,7 +56,13 @@ void Game::handleGameOver() {
     boosters.clear();
 
     // Re-starting the game
+    QMessageBox msgBox;
+    msgBox.setText("Game Over! Try again.");
+    msgBox.exec();
     startGame();
+
+
+    
 }
 
 
@@ -234,7 +241,7 @@ void Game::checkCollisions() {
                         delete enemy;
                     }
                     enemies.clear();
-                    startGame();
+                    handleGameOver();
                     return;
                 }
             }
@@ -292,7 +299,7 @@ void Game::activateBoost() {
 }
 
 void Game::handleVictory() {
-    if (player->getPosition().getX() + player->getSceneX() == 3000) {// Reaching the end of the last platform
+    if (player->getPosition().getX() + player->getSceneX() >= 4500) {// Reaching the end of the last platform
         QMessageBox msgBox;
         msgBox.setText("Congratulations! You won!");
         msgBox.exec();
